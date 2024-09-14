@@ -1,10 +1,13 @@
 from aws_cdk import (
     aws_ec2 as ec2,
-    core
+    Stack,
+    App,
+    CfnOutput
 )
+from constructs import Construct
 
-class MyEc2Stack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+class MyEc2Stack(Stack):
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
         # Usar la VPC por defecto
@@ -26,7 +29,7 @@ class MyEc2Stack(core.Stack):
         instance = ec2.Instance(self, "EC2Instance",
             instance_type=ec2.InstanceType("t2.micro"),
             machine_image=ec2.MachineImage.generic_linux({
-                "us-east-1": "ami-0aa28dab1f2852040"  # AMI específica
+                "us-east-1": "ami-0aa28dab1f2852040"  # AMI especÃ­fica
             }),
             vpc=vpc,
             security_group=security_group,
@@ -42,11 +45,11 @@ class MyEc2Stack(core.Stack):
             "ls -l"
         )
 
-        # Outputs: IP Pública y URLs de los sitios web
-        core.CfnOutput(self, "InstancePublicIP", value=instance.instance_public_ip)
-        core.CfnOutput(self, "websimpleURL", value=f"http://{instance.instance_public_ip}/websimple")
-        core.CfnOutput(self, "webplantillaURL", value=f"http://{instance.instance_public_ip}/webplantilla")
+        # Outputs: IP PÃºblica y URLs de los sitios web
+        CfnOutput(self, "InstancePublicIP", value=instance.instance_public_ip)
+        CfnOutput(self, "websimpleURL", value=f"http://{instance.instance_public_ip}/websimple")
+        CfnOutput(self, "webplantillaURL", value=f"http://{instance.instance_public_ip}/webplantilla")
 
-app = core.App()
+app = App()
 MyEc2Stack(app, "MyEc2Stack")
 app.synth()
