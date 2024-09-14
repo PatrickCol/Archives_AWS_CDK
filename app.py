@@ -2,7 +2,8 @@ from aws_cdk import (
     aws_ec2 as ec2,
     Stack,
     App,
-    CfnOutput
+    CfnOutput,
+    Environment
 )
 from constructs import Construct
 
@@ -51,5 +52,8 @@ class MyEc2Stack(Stack):
         CfnOutput(self, "webplantillaURL", value=f"http://{instance.instance_public_ip}/webplantilla")
 
 app = App()
-MyEc2Stack(app, "MyEc2Stack")
+
+# Especificar el entorno
+MyEc2Stack(app, "MyEc2Stack", env=Environment(account="563192231692", region="us-east-1"))
+
 app.synth()
